@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pastein
+
+A production-ready Pastebin-like web application built with Next.js and Redis.
+
+## Features
+
+- **Create Pastes**: Share text and code snippets easily.
+- **TTL (Time-to-Live)**: Set an optional expiration time in seconds.
+- **View Limits**: Set an optional maximum number of views.
+- **Atomic Operations**: View counting and expiration are handled atomically using Redis Lua scripts.
+- **Deterministic Time**: Supports `TEST_MODE` for automated testing of time-based features.
+- **Modern UI**: Clean, responsive design with dark mode support.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router, TypeScript)
+- **Deployment**: Optimized for Vercel
+- **Persistence**: Redis (compatible with Upstash Redis, Vercel KV, or local Redis)
+- **Styling**: Vanilla CSS
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A Redis instance (Local or Cloud)
+
+### Environment Variables
+
+Create a `.env.local` file with the following:
+
+```env
+REDIS_URL=redis://localhost:6379
+# Set to 1 to enable deterministic time via x-test-now-ms header
+TEST_MODE=0
+```
+
+### Installation
+
+```bash
+npm install
+```
+
+### Running Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Health Check
+`GET /api/healthz`
+- Returns `{"ok": true}` if Redis is reachable.
 
-## Learn More
+### Create Paste
+`POST /api/pastes`
+- Body: `{"content": "string", "ttl_seconds": 60, "max_views": 5}`
+- Returns: `{"id": "string", "url": "string"}`
 
-To learn more about Next.js, take a look at the following resources:
+### Fetch Paste (API)
+`GET /api/pastes/:id`
+- Returns: `{"content": "string", "remaining_views": 4, "expires_at": "ISOString"}`
+- Returns 404 if paste is missing, expired, or view limit reached.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Persistence Layer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notable Decisions
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Atomic Operations**: Used Redis Lua scripts for fetching pastes and decrementing view counts. This ensures that even under concurrent access in a serverless environment, view limits are strictly enforced and no race conditions occur.
+- **Deterministic Time**: Implemented a global time utility that respects the `TEST_MODE` and `x-test-now-ms` header, allowing for reliable automated testing of expiration logic.
+- **Serverless Safety**: Avoided all global mutable state and in-memory caching. The application relies entirely on Redis for persistence, making it fully compatible with Vercel's serverless functions.
+- **Security**: Paste content is rendered within `<pre>` tags in React, ensuring safe display without the risk of script execution.
