@@ -9,6 +9,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{ id: string; url: string } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +50,8 @@ export default function Home() {
   const copyToClipboard = () => {
     if (result) {
       navigator.clipboard.writeText(result.url);
-      alert('Link copied to clipboard!');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -103,19 +105,36 @@ export default function Home() {
         </form>
 
         {result && (
-          <div className="success-message">
-            <p><strong>Success!</strong> Your paste is ready:</p>
-            <div className="copy-area">
-              <input type="text" readOnly value={result.url} />
-              <button onClick={copyToClipboard} className="btn" style={{ width: 'auto' }}>
-                Copy
-              </button>
+          <div className="modal-overlay" onClick={() => setResult(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close" onClick={() => setResult(null)}>&times;</button>
+              <div className="modal-icon">✓</div>
+              <h2 style={{ marginBottom: '0.5rem', color: 'var(--foreground)' }}>Paste Created!</h2>
+              <p style={{ marginBottom: '1.5rem', color: 'var(--text-muted)' }}>
+                Your shareable link is ready below.
+              </p>
+              <div className="copy-area">
+                <input type="text" readOnly value={result.url} id="result-url" />
+                <button
+                  onClick={copyToClipboard}
+                  className="btn"
+                  style={{ width: 'auto', whiteSpace: 'nowrap' }}
+                >
+                  {copied ? 'Copied!' : 'Copy Link'}
+                </button>
+              </div>
+              <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <a
+                  href={result.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary"
+                  style={{ textDecoration: 'none' }}
+                >
+                  View Paste
+                </a>
+              </div>
             </div>
-            <p style={{ marginTop: '1rem', fontSize: '0.875rem' }}>
-              <a href={result.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>
-                View Paste &rarr;
-              </a>
-            </p>
           </div>
         )}
       </div>
