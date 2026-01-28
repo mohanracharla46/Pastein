@@ -9,6 +9,8 @@ const TTL_OPTIONS = [
   { label: '30 min', value: '1800' },
   { label: '1 Hour', value: '3600' },
   { label: '1 Day', value: '86400' },
+  { label: '1 Week', value: '604800' },
+  { label: '1 Month', value: '2592000' },
 ];
 
 export default function Home() {
