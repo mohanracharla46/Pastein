@@ -47,14 +47,40 @@ export default async function ViewPastePage({
         result = await redis.eval(GET_PASTE_SCRIPT, 1, key, now) as any;
     } catch (error) {
         console.error('Persistence layer error:', error);
-        throw new Error('Could not connect to the persistence layer. Please check your Redis configuration.');
+        throw new Error('Could not connect to the persistence layer.');
     }
 
     if (result && result.err) {
-        if (result.err === 'NOT_FOUND' || result.err === 'EXPIRED' || result.err === 'LIMIT_EXCEEDED') {
+        if (result.err === 'NOT_FOUND') {
             notFound();
         }
-        throw new Error(`Persistence error: ${result.err}`);
+
+        // Custom UI for Expired or View Limit reached
+        return (
+            <div className="container">
+                <div className="paste-card" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
+                    <div className="modal-icon" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)' }}>!</div>
+                    <h1 style={{
+                        background: 'none',
+                        WebkitTextFillColor: 'var(--error)',
+                        color: 'var(--error)',
+                        marginBottom: '1rem'
+                    }}>
+                        Paste Unavailable
+                    </h1>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '2rem' }}>
+                        {result.err === 'EXPIRED'
+                            ? "This paste has expired due to its Time-to-Live (TTL) constraint."
+                            : "This paste is no longer available because it has reached its maximum view limit."}
+                    </p>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                        <a href="/" className="btn" style={{ width: 'auto', padding: '0.75rem 2rem' }}>
+                            Create a New Paste
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     if (!result || !Array.isArray(result)) {
