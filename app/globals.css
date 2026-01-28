@@ -86,7 +86,6 @@ body::after {
   padding: 3rem;
   box-shadow: var(--shadow-lg);
   position: relative;
-  overflow: hidden;
 }
 
 .paste-card::before {
@@ -96,7 +95,9 @@ body::after {
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(to right, var(--primary), var(--accent-rose));
+  background: linear-gradient(to right, var(--primary), var(--accent-emerald));
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
 }
 
 @keyframes fadeIn {
@@ -136,8 +137,7 @@ label {
 }
 
 textarea,
-input,
-select {
+input {
   width: 100%;
   background: var(--input-bg);
   border: 2px solid transparent;
@@ -148,107 +148,10 @@ select {
   font-size: 1rem;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-  appearance: none;
-}
-
-/* Custom Select Styling */
-.custom-select-container {
-  position: relative;
-  width: 100%;
-}
-
-.custom-select-trigger {
-  width: 100%;
-  background: var(--input-bg);
-  border: 2px solid transparent;
-  border-radius: 1rem;
-  padding: 1rem 1.25rem;
-  color: var(--foreground);
-  font-family: inherit;
-  font-size: 1rem;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 3.5rem;
-}
-
-.custom-select-trigger:hover {
-  background: #fff;
-  border-color: var(--secondary);
-}
-
-.custom-select-container.open .custom-select-trigger {
-  background: #fff;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1), var(--shadow-sm);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.custom-select-arrow {
-  width: 1.25rem;
-  height: 1.25rem;
-  transition: transform 0.3s ease;
-  color: var(--foreground);
-}
-
-.custom-select-container.open .custom-select-arrow {
-  transform: rotate(180deg);
-}
-
-.custom-select-options {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border: 2px solid var(--primary);
-  border-top: none;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  z-index: 100;
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-  animation: slideDown 0.2s ease-out;
-}
-
-.custom-select-option {
-  padding: 0.875rem 1.25rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: var(--foreground);
-}
-
-.custom-select-option:hover {
-  background: var(--secondary);
-  padding-left: 1.5rem;
-  color: var(--primary);
-}
-
-.custom-select-option.selected {
-  background: var(--secondary);
-  font-weight: 600;
-  color: var(--primary);
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 textarea:focus,
-input:focus,
-select:focus {
+input:focus {
   outline: none;
   background: #fff;
   border-color: var(--primary);
@@ -297,7 +200,7 @@ textarea {
 .btn-secondary {
   display: inline-block;
   background: var(--secondary);
-  color: white;
+  color: var(--foreground);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   text-decoration: none;
@@ -319,8 +222,99 @@ textarea {
   font-size: 0.875rem;
 }
 
-.success-message {
-  display: none;
+/* Custom Select Styling */
+.custom-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-container.open {
+  z-index: 1000;
+}
+
+.custom-select-trigger {
+  width: 100%;
+  background: var(--input-bg);
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.5rem;
+}
+
+.custom-select-trigger:hover {
+  background: #fff;
+  border-color: var(--secondary);
+}
+
+.custom-select-container.open .custom-select-trigger {
+  background: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1), var(--shadow-sm);
+}
+
+.custom-select-arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+  color: var(--foreground);
+}
+
+.custom-select-container.open .custom-select-arrow {
+  transform: rotate(180deg);
+}
+
+.custom-select-options {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 1rem;
+  z-index: 1001;
+  box-shadow: var(--shadow-lg), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: slideDown 0.2s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.custom-select-option {
+  padding: 0.875rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--foreground);
+}
+
+.custom-select-option:hover {
+  background: var(--secondary);
+  padding-left: 1.5rem;
+  color: var(--primary);
+}
+
+.custom-select-option.selected {
+  background: var(--secondary);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Modal Overlay */
@@ -335,7 +329,7 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
   animation: fadeIn 0.3s ease-out;
 }
 
@@ -388,16 +382,6 @@ textarea {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
   }
 }
 
