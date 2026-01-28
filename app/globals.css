@@ -172,8 +172,8 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--primary), var(--accent-teal));
-  color: #fff;
+  background: var(--primary);
+  color: #2d3436;
   padding: 1rem 2rem;
   border-radius: 1rem;
   font-weight: 700;
@@ -183,12 +183,13 @@ textarea {
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
   font-size: 1rem;
-  box-shadow: 0 10px 20px -10px rgba(105, 181, 190, 0.6);
+  box-shadow: 0 10px 20px -10px rgba(229, 204, 97, 0.4);
 }
 
 .btn:hover {
+  background: var(--primary-hover);
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 20px 30px -12px rgba(105, 181, 190, 0.5);
+  box-shadow: 0 20px 30px -12px rgba(229, 204, 97, 0.3);
 }
 
 .btn:active {
