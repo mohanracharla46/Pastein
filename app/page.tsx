@@ -76,15 +76,19 @@ export default function Home() {
 
           <div className="grid">
             <div className="form-group">
-              <label htmlFor="ttl">TTL (Seconds, Optional)</label>
-              <input
-                type="number"
+              <label htmlFor="ttl">Expiration (Optional)</label>
+              <select
                 id="ttl"
-                placeholder="e.g. 3600"
-                min="1"
                 value={ttl}
                 onChange={(e) => setTtl(e.target.value)}
-              />
+              >
+                <option value="">Never</option>
+                <option value="30">30 seconds</option>
+                <option value="60">1 minute</option>
+                <option value="1800">30 min</option>
+                <option value="3600">1 Hour</option>
+                <option value="86400">1 Day</option>
+              </select>
             </div>
             <div className="form-group">
               <label htmlFor="maxViews">Max Views (Optional)</label>

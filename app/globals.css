@@ -136,7 +136,8 @@ label {
 }
 
 textarea,
-input {
+input,
+select {
   width: 100%;
   background: var(--input-bg);
   border: 1px solid transparent;
@@ -150,11 +151,12 @@ input {
 }
 
 textarea:focus,
-input:focus {
+input:focus,
+select:focus {
   outline: none;
   background: #fff;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1), var(--shadow-sm);
+  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1), var(--shadow-sm);
 }
 
 textarea {
