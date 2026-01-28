@@ -1,6 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+
+const TTL_OPTIONS = [
+  { label: 'Never', value: '' },
+  { label: '30 seconds', value: '30' },
+  { label: '1 minute', value: '60' },
+  { label: '30 min', value: '1800' },
+  { label: '1 Hour', value: '3600' },
+  { label: '1 Day', value: '86400' },
+];
 
 export default function Home() {
   const [content, setContent] = useState('');
@@ -10,6 +19,19 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{ id: string; url: string } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const selectRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+        setIsSelectOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +77,8 @@ export default function Home() {
     }
   };
 
+  const selectedTtlLabel = TTL_OPTIONS.find(opt => opt.value === ttl)?.label || 'Never';
+
   return (
     <div className="container">
       <div className="paste-card">
@@ -76,19 +100,37 @@ export default function Home() {
 
           <div className="grid">
             <div className="form-group">
-              <label htmlFor="ttl">Expiration (Optional)</label>
-              <select
-                id="ttl"
-                value={ttl}
-                onChange={(e) => setTtl(e.target.value)}
+              <label>Expiration (Optional)</label>
+              <div
+                className={`custom-select-container ${isSelectOpen ? 'open' : ''}`}
+                ref={selectRef}
               >
-                <option value="">Never</option>
-                <option value="30">30 seconds</option>
-                <option value="60">1 minute</option>
-                <option value="1800">30 min</option>
-                <option value="3600">1 Hour</option>
-                <option value="86400">1 Day</option>
-              </select>
+                <div
+                  className="custom-select-trigger"
+                  onClick={() => setIsSelectOpen(!isSelectOpen)}
+                >
+                  <span>{selectedTtlLabel}</span>
+                  <svg className="custom-select-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                {isSelectOpen && (
+                  <div className="custom-select-options">
+                    {TTL_OPTIONS.map((option) => (
+                      <div
+                        key={option.value}
+                        className={`custom-select-option ${ttl === option.value ? 'selected' : ''}`}
+                        onClick={() => {
+                          setTtl(option.value);
+                          setIsSelectOpen(false);
+                        }}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             <div className="form-group">
               <label htmlFor="maxViews">Max Views (Optional)</label>
