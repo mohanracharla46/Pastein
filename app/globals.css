@@ -1,21 +1,21 @@
 :root {
-  --background: #f3f4f3;
-  --foreground: #2d3436;
-  --primary: #e5cc61;
-  --primary-hover: #d4bc52;
-  --secondary: #c5cb96;
-  --secondary-hover: #b4ba85;
-  --accent-teal: #69b5be;
-  --accent-blue: #5cb0c4;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary: #f1f5f9;
+  --secondary-hover: #e2e8f0;
+  --accent-teal: #22d3ee;
+  --accent-blue: #3b82f6;
   --card-bg: #ffffff;
-  --border: #e8e9e8;
-  --input-bg: #f9faf9;
-  --error: #ff7675;
-  --success: #55efc4;
-  --text-muted: #636e72;
+  --border: #f1f5f9;
+  --input-bg: #f8fafc;
+  --error: #ef4444;
+  --success: #10b981;
+  --text-muted: #64748b;
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 10px -2px rgba(105, 181, 190, 0.2);
-  --shadow-lg: 0 20px 40px -10px rgba(105, 181, 190, 0.15);
+  --shadow-md: 0 4px 12px -2px rgba(99, 102, 241, 0.12);
+  --shadow-lg: 0 20px 40px -10px rgba(99, 102, 241, 0.1);
 }
 
 * {
@@ -51,13 +51,13 @@ body::after {
 }
 
 body::before {
-  background: rgba(229, 204, 97, 0.2);
+  background: rgba(99, 102, 241, 0.1);
   top: -100px;
   left: -100px;
 }
 
 body::after {
-  background: rgba(105, 181, 190, 0.2);
+  background: rgba(34, 211, 238, 0.1);
   bottom: -100px;
   right: -100px;
   animation-delay: -10s;
@@ -173,7 +173,7 @@ textarea {
   align-items: center;
   justify-content: center;
   background: var(--primary);
-  color: #2d3436;
+  color: white;
   padding: 1rem 2rem;
   border-radius: 1rem;
   font-weight: 700;
@@ -183,13 +183,13 @@ textarea {
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
   font-size: 1rem;
-  box-shadow: 0 10px 20px -10px rgba(229, 204, 97, 0.4);
+  box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.5);
 }
 
 .btn:hover {
   background: var(--primary-hover);
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 20px 30px -12px rgba(229, 204, 97, 0.3);
+  box-shadow: 0 20px 30px -12px rgba(99, 102, 241, 0.4);
 }
 
 .btn:active {
