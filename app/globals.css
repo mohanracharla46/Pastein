@@ -1,18 +1,22 @@
 :root {
-  --background: #fcfdfd;
-  --foreground: #1a222e;
-  --primary: #ff7b7b;
-  --primary-hover: #fa6666;
-  --secondary: #755e81;
-  --secondary-hover: #5e4a68;
+  --background: #fdfefe;
+  --foreground: #0f172a;
+  --primary: #ff6b6b;
+  --primary-hover: #fa5252;
+  --secondary: #f1f5f9;
+  --secondary-hover: #e2e8f0;
   --card-bg: #ffffff;
-  --border: #e2e8f0;
+  --border: #f1f5f9;
   --input-bg: #f8fafc;
-  --error: #ef4444;
-  --success: #10b981;
+  --error: #ff5252;
+  --success: #20c997;
+  --text-primary: #1e293b;
   --text-muted: #64748b;
-  --accent-rose: #cc7487;
-  --accent-blue: #3e6484;
+  --accent-rose: #f06595;
+  --accent-blue: #339af0;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 * {
@@ -22,29 +26,41 @@
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(circle at top right, #f8f9fa, #ffffff);
   color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.5;
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  line-height: 1.6;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 .container {
   width: 100%;
-  max-width: 800px;
-  padding: 2rem;
+  max-width: 900px;
+  padding: 3rem 1.5rem;
 }
 
 .paste-card {
   background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  animation: fadeIn 0.5s ease-out;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  border-radius: 2rem;
+  padding: 3rem;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.paste-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(to right, var(--primary), var(--accent-rose));
 }
 
 @keyframes fadeIn {
@@ -60,13 +76,15 @@ body {
 }
 
 h1 {
-  font-size: 1.875rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(to right, var(--primary), var(--accent-rose), var(--secondary));
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent-rose));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1.2;
 }
 
 .form-group {
@@ -85,20 +103,22 @@ textarea,
 input {
   width: 100%;
   background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
   color: var(--foreground);
   font-family: inherit;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
 }
 
 textarea:focus,
 input:focus {
   outline: none;
+  background: #fff;
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(255, 123, 123, 0.2);
-  background: var(--card-bg);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1), var(--shadow-sm);
 }
 
 textarea {
@@ -113,26 +133,30 @@ textarea {
 }
 
 .btn {
-  display: inline-block;
-  background: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--accent-rose));
   color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  font-weight: 700;
   text-align: center;
   border: none;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
   font-size: 1rem;
+  box-shadow: 0 10px 15px -10px rgba(255, 107, 107, 0.4);
 }
 
 .btn:hover {
-  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -12px rgba(255, 107, 107, 0.4);
 }
 
 .btn:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 .btn-secondary {
@@ -274,15 +298,18 @@ hr {
 }
 
 .paste-content pre {
-  background: var(--input-bg);
+  background: #f8fafc;
   color: var(--foreground);
-  padding: 1rem;
-  border-radius: 0.5rem;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-all;
-  font-family: 'Fira Code', 'Courier New', Courier, monospace;
-  border: 1px solid var(--border);
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
 }
 
 footer {
