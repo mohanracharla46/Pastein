@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
 
-const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+const redisUrl = process.env.REDIS_URL;
 
 const globalForRedis = global as unknown as { redis: any };
 
@@ -39,10 +39,24 @@ const mockRedis = {
 };
 
 if (!globalForRedis.redis) {
-    if (process.env.NODE_ENV === 'production' || process.env.REDIS_URL) {
-        globalForRedis.redis = new Redis(redisUrl);
+    if (redisUrl) {
+        const options: any = {
+            maxRetriesPerRequest: null,
+            retryStrategy: (times: number) => Math.min(times * 50, 2000),
+        };
+
+        // If using rediss:// (SSL), common in managed Redis services
+        if (redisUrl.startsWith('rediss://')) {
+            options.tls = {
+                rejectUnauthorized: false // Often required for internal or self-signed certs in cloud envs
+            };
+        }
+
+        globalForRedis.redis = new Redis(redisUrl, options);
+    } else if (process.env.NODE_ENV === 'production') {
+        console.error('CRITICAL: REDIS_URL is not defined in production environment!');
+        globalForRedis.redis = mockRedis; // Last resort fallback to prevent crash, but should be fixed
     } else {
-        // Fallback to mock for local testing without redis server
         globalForRedis.redis = mockRedis;
     }
 }

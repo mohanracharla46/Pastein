@@ -45,9 +45,10 @@ export async function POST(req: Request) {
         }
         await pipeline.exec();
 
+        const protocol = req.headers.get('x-forwarded-proto') || (req.headers.get('host')?.includes('localhost') ? 'http' : 'https');
         const host = req.headers.get('host') || 'localhost:3000';
-        const protocol = host.includes('localhost') ? 'http' : 'https';
-        const url = `${protocol}://${host}/p/${id}`;
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`;
+        const url = `${baseUrl}/p/${id}`;
 
         return NextResponse.json({ id, url }, { status: 201 });
 
